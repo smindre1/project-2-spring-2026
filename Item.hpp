@@ -10,6 +10,7 @@ enum ItemType {
     ARMOR = 3
 };
 
+
 struct Item {
     std::string name_;
     float weight_;
@@ -60,12 +61,8 @@ struct Item {
 template <>
 struct std::hash<Item> {
 
-    /**
-     * @brief Computes a hash value for an Item based on
-     * using the standard hash for strings on the Item's name
-     *
-     * @param i The Item to hash
-     * @return Hash value for the Item
-     */
+        // @brief Computes a hash value for an Item based on using the standard hash for strings on the Item 's name
+        // @param i The Item to hash
+        // @return Hash value for the Item
     size_t operator()(const Item& i) const;
 };

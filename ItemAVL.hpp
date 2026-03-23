@@ -1,7 +1,6 @@
-/**
- * @file ItemAVL.hpp
- * @brief Defines the interface for the AVLtree class & implementation of the Node struct
- */
+// @file ItemAVL.hpp
+// @brief Defines the interface for the AVLtree class & implementation of the Node struct
+
 
 #pragma once
 #include <algorithm>
@@ -33,22 +32,18 @@ struct Node {
 template <class Comparator = CompareItemName>
 class ItemAVL {
 public:
-    /**
-     * @brief Default Constructor: Construct a new AVLtree object
-     */
+
+    // @brief Default Constructor: Construct a new AVLtree object
     ItemAVL();
 
-    /**
-     * @brief Destroy the AVLtree, deallocating all necessary Nodes
-     */
+    // @brief Destroy the AVLtree, deallocating all necessary Nodes
     ~ItemAVL();
 
     // =========== INSERTION & BALANCE  ===========
 
-    /**
-     * @brief Gets the Node stored within the root
-     * @return A const pointer to the Node representing the root of the ItemTree
-     */
+
+    // @brief Gets the Node stored within the root
+    // @return A const pointer to the Node representing the root of the ItemTree
     const Node* root() const;
 
     /**

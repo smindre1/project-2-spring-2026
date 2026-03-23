@@ -36,6 +36,7 @@ template <class Comparator>
 void Inventory<Comparator, Tree>::equip(Item* itemToEquip)
 {
     equipped_ = itemToEquip;
+
 }
 
 /**
@@ -149,13 +150,28 @@ bool Inventory<Comparator, Tree>::contains(const std::string& itemName) const
 template <class Comparator>
 std::unordered_set<Item> Inventory<Comparator, Tree>::query(const Item& start, const Item& end) const
 {
-    // Your code here.
+    std::unordered_set<Item> list;
+    if(!items_.root_) {
+        return list;
+    } else {
+        queryHelper(start, end, items_.root_, list);
+        return list;
+    }
 }
 
 template <class Comparator>
 void Inventory<Comparator, Tree>::queryHelper(const Item& start, const Item& end, const Node* root, std::unordered_set<Item>& result) const
 {
-    // Your code here.
+    if(root->left_){
+        queryHelper(start, end, root->left_, result);
+    }
+    if(root->right_){
+        queryHelper(start, end, root->right_, result);
+    }
+
+    if(root->value_.weight_ >= start.weight_ && root->value_.weight_ <= end.weight_) {
+        result.insert(root->value_);
+    }
 }
 
 /**

@@ -35,8 +35,10 @@ void Inventory<Comparator, std::unordered_set<Item>>::equip(Item* itemToEquip)
 template <class Comparator>
 void Inventory<Comparator, std::unordered_set<Item>>::discardEquipped()
 {
-    delete equipped_;
-    equipped_ = nullptr;
+    if (equipped_) {
+        delete equipped_;
+        equipped_ = nullptr;
+    }
 }
 
  // @brief Retrieves the value stored in `weight_`
@@ -49,8 +51,7 @@ float Inventory<Comparator, std::unordered_set<Item>>::getWeight() const
 
  // @brief Retrieves the size of items_
 template <class Comparator>
-size_t
-Inventory<Comparator, std::unordered_set<Item>>::size() const
+size_t Inventory<Comparator, std::unordered_set<Item>>::size() const
 {
     return items_.size();
 }
@@ -71,8 +72,8 @@ Inventory<Comparator, std::unordered_set<Item>>::getItems() const
 template <class Comparator>
 bool Inventory<Comparator, std::unordered_set<Item>>::pickup(const Item& target)
 {
-    for(auto it = items_.begin(); it != items_.end(); it++) {
-        if(items_[it].name_ == target.name_) {
+    for (auto ele : items_) {
+        if(ele.name_ == target.name_) {
             return false;
         }
     }
@@ -90,10 +91,10 @@ template <class Comparator>
 bool Inventory<Comparator, std::unordered_set<Item>>::discard(
     const std::string& itemName)
 {
-    for(auto it = items_.begin(); it != items_.end(); it++) {
-        if(items_[it].name_ == itemName) {
-            weight_ = weight_ - items_[it].weight_;
-            items_.erase(it);
+    for (auto ele : items_) {
+        if(ele.name_ == itemName) {
+            weight_ = weight_ - ele.weight_;
+            items_.erase(ele);
             return true;
         }
     }
@@ -107,8 +108,8 @@ template <class Comparator>
 bool Inventory<Comparator, std::unordered_set<Item>>::contains(
     const std::string& itemName) const
 {
-    for(auto it = items_.begin(); it != items_.end(); it++) {
-        if(items_[it].name_ == itemName) {
+    for(auto ele : items_) {
+        if(ele.name_ == itemName) {
             return true;
         }
     }
@@ -132,27 +133,27 @@ std::unordered_set<Item>
 Inventory<Comparator, std::unordered_set<Item>>::query(const Item& start,
     const Item& end) const
 {
-    std::unordered_set<Item>> newItems;
-    if(CompareItemWeight::lessThan(end.weight_, start.weight_)) {
+    std::unordered_set<Item> newItems;
+    if(Comparator::lessThan(end.weight_, start.weight_)) {
         return newItems;
     }
 
     for(auto it = items_.begin; it != items_.end(); it++) {
-        if(CompareItemWeight::leq(items_[it].weight_, end.weight_) && CompareItemWeight::leq(start.weight_, items_[it].weight_)) {
+        if(Comparator::leq(items_[it].weight_, end.weight_) && Comparator::leq(start.weight_, items_[it].weight_)) {
             newItems.insert(items_[it]);
         }
     }
 
 }
 
-/**
- * @brief Destructor for the Inventory class.
- * @post Deallocates any dynamically allocated resources.
- */
+// @brief Destructor for the Inventory class.
+// @post Deallocates any dynamically allocated resources.
 template <class Comparator>
 Inventory<Comparator, std::unordered_set<Item>>::~Inventory()
 {
-    delete equipped_;
-    delete items_[];
+    if(equipped_) {
+        delete equipped_;
+        equipped_ = nullptr;
+    }
     weight_ = 0.0;
 }

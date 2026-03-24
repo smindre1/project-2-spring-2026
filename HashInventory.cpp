@@ -34,7 +34,7 @@ void Inventory<Comparator, std::unordered_set<Item>>::equip(Item* itemToEquip)
 template <class Comparator>
 void Inventory<Comparator, std::unordered_set<Item>>::discardEquipped()
 {
-    if (equipped_) {
+    if (equipped_ != nullptr) {
         delete equipped_;
         equipped_ = nullptr;
     }
@@ -71,10 +71,8 @@ Inventory<Comparator, std::unordered_set<Item>>::getItems() const
 template <class Comparator>
 bool Inventory<Comparator, std::unordered_set<Item>>::pickup(const Item& target)
 {
-    for (auto ele : items_) {
-        if(ele.name_ == target.name_) {
-            return false;
-        }
+    if(items_.find(target) != items_.end()){
+        return false;
     }
 
     items_.insert(target);
@@ -90,14 +88,14 @@ template <class Comparator>
 bool Inventory<Comparator, std::unordered_set<Item>>::discard(
     const std::string& itemName)
 {
-    for (auto ele : items_) {
-        if(ele.name_ == itemName) {
-            weight_ = weight_ - ele.weight_;
-            items_.erase(ele);
-            return true;
-        }
+    Item tempItem(itemName);
+    if(items_.find(tempItem) == items_.end()){
+        return false;
     }
-    return false;
+    float discardedWeight = items_.find(tempItem)->weight_;
+    items_.erase(tempItem);
+    weight_ -= discardedWeight;
+    return true;
 }
 
 // @brief Checks if an item with the given name exists in the inventory.
@@ -107,12 +105,7 @@ template <class Comparator>
 bool Inventory<Comparator, std::unordered_set<Item>>::contains(
     const std::string& itemName) const
 {
-    for(auto ele : items_) {
-        if(ele.name_ == itemName) {
-            return true;
-        }
-    }
-    return false;
+    return items_.find(Item(itemName)) != items_.end();
 }
 
 // @brief Queries the inventory for items within a specified range.

@@ -157,6 +157,7 @@ template <class Comparator>
 bool ItemAVL<Comparator>::contains(const std::string& target, const Node* subroot) const
 {
     bool le, ri, ro = false;
+    
     if(subroot->left_) {
         le = contains(target, subroot->left_);
     }

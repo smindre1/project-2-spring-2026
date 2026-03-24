@@ -42,5 +42,5 @@ bool CompareItemName::equal(const Item& a, const Item& b)
 
 bool CompareItemName::leq(const Item& a, const Item& b)
 {
-    return lessThan(a, b) || equal(a, b);
+    return a.name_ <= b.name_;
 }

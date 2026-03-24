@@ -6,7 +6,6 @@
 template <class Comparator>
 Inventory<Comparator, std::unordered_set<Item>>::Inventory()
 {
-    std::unordered_set<Item> list = {};
     equipped_ = nullptr;
     weight_ = 0.0;
 }
@@ -134,16 +133,16 @@ Inventory<Comparator, std::unordered_set<Item>>::query(const Item& start,
     const Item& end) const
 {
     std::unordered_set<Item> newItems;
-    if(Comparator::lessThan(end.weight_, start.weight_)) {
+    if(Comparator::lessThan(end, start)) {
         return newItems;
     }
 
-    for(auto it = items_.begin; it != items_.end(); it++) {
-        if(Comparator::leq(items_[it].weight_, end.weight_) && Comparator::leq(start.weight_, items_[it].weight_)) {
-            newItems.insert(items_[it]);
+    for(auto it = items_.begin(); it != items_.end(); it++) {
+        if(Comparator::leq(*it, end) && Comparator::leq(start, (*it))) {
+            newItems.insert(*it);
         }
     }
-
+    return newItems;
 }
 
 // @brief Destructor for the Inventory class.
@@ -151,9 +150,6 @@ Inventory<Comparator, std::unordered_set<Item>>::query(const Item& start,
 template <class Comparator>
 Inventory<Comparator, std::unordered_set<Item>>::~Inventory()
 {
-    if(equipped_) {
-        delete equipped_;
-        equipped_ = nullptr;
-    }
+    discardEquipped();
     weight_ = 0.0;
 }

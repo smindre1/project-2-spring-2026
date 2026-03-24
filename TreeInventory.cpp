@@ -151,27 +151,39 @@ template <class Comparator>
 std::unordered_set<Item> Inventory<Comparator, Tree>::query(const Item& start, const Item& end) const
 {
     std::unordered_set<Item> list;
-    if(!items_.root_) {
+    if(Comparator::lessThan(end, start)) {
         return list;
-    } else {
-        queryHelper(start, end, items_.root_, list);
+    } 
+    const Node* root = items_.root();
+
+    if(!root) {
         return list;
     }
+
+    queryHelper(start, end, root, list);
+    return list;
 }
 
 template <class Comparator>
 void Inventory<Comparator, Tree>::queryHelper(const Item& start, const Item& end, const Node* root, std::unordered_set<Item>& result) const
 {
-    if(root->left_){
-        queryHelper(start, end, root->left_, result);
-    }
-    if(root->right_){
-        queryHelper(start, end, root->right_, result);
+    if(!root){
+        return;
     }
 
-    if(root->value_.weight_ >= start.weight_ && root->value_.weight_ <= end.weight_) {
-        result.insert(root->value_);
+    const Item& curr = root->value_;
+
+    if(!Comparator::lessThan( curr , start)){
+        queryHelper(start,end,root->left_,result);
     }
+
+    if (!Comparator::lessThan(curr, start) && !Comparator::lessThan(end, curr)) {
+        result.insert(curr);
+    }
+    
+    if (!Comparator::lessThan(end, curr)) {
+        queryHelper(start, end, root->right_, result);
+    } 
 }
 
 /**

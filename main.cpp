@@ -4,75 +4,90 @@
 #include "Item.hpp"
 #include "ItemAVL.hpp"
 #include "TreeInventory.hpp"
-#include "ItemGenerator.hpp"
-#include <chrono>
+#include "timing.hpp"
+
 #include <iostream>
+#include <vector>
 #include <list>
+#include <unordered_set>
 
+int main() {
+    std::vector<int> sizes = {1000, 2000, 4000, 8000};
 
-std::vector<int> n = { 1000 , 2000 , 4000 , 8000 };
+    for (int n : sizes) {
+        std::cout << "n = " << n << "\n";
 
-template <class Comparator, class Container>
-int timeCheck(Inventory<Comparator, Container> inv )
-{
-    ItemGenerator item(42);
-    Inventory<CompareItemName> vectInv;
-    // Inventory<CompareItemName, std::unordered_set<Item>> unorInv;
-    // Inventory<CompareItemName, Tree> TreeInv;
-    // Inventory<CompareItemName, std::list> compInv;
+        std::cout << "Vector: "
+                  << timeContains<CompareItemName, std::vector<Item>>(n) << "\n";
 
-    
-    
-    for(auto ele : n) {
-        for(int i = 0; i < ele; i++) {
-            vectInv.pickup(item.randomItem());
-        }
-        std::vector<Item> contained;
-        std::vector<Item> missing;
-        
-        for(int i = 0; i < 100; i++){
-            contained.push_back(item.randomUsedName()); 
-            missing.push_back(item.randomUsedName()); 
-        }
-        
-        std::chrono::duration<double, std::milli> totalC;
-        std::chrono::duration<double, std::milli> totalM;
+        std::cout << "List: "
+                  << timeContains<CompareItemName, std::list<Item>>(n) << "\n";
 
-        for(auto it = contained.begin(); it != contained.end(); it++) {
-            const auto t1 = std::chrono::high_resolution_clock::now();
-            vectInv.contains((*it).name_);
-            const auto t2 = std::chrono::high_resolution_clock::now();
-            const std::chrono::duration<double, std::milli> fp_ms = t2 - t1;
-            totalC = totalC + fp_ms;
-        }
-        for(auto it = missing.begin(); it != missing.end(); it++) {
-            const auto t1 = std::chrono::high_resolution_clock::now();
-            vectInv.contains((*it).name_);
-            const auto t2 = std::chrono::high_resolution_clock::now();
-            const std::chrono::duration<double, std::milli> fp_ms = t2 - t1;
-            totalM = totalM + fp_ms;
-        }
+        std::cout << "Hash: "
+                  << timeContains<CompareItemName, std::unordered_set<Item>>(n) << "\n";
 
-        std::cout << "n: " << ele << std::endl;
-        std::cout << "Contained Avg RT: " << totalC.count()/200 << std::endl;
-        std::cout << "Missing Avg RT: " << totalM.count()/200 << std::endl;
-        //totalC.count();
+        std::cout << "Tree: "
+                  << timeContains<CompareItemName, Tree>(n) << "\n";
     }
+
+    std::cout << std::endl;
+
+    for (int n : sizes) {
+        std::cout << "n = " << n << "\n";
+
+        std::cout << "\nVector Weight: "
+                    << timeQueryWeight<CompareItemName, std::vector<Item>>(n) << "\n";
+        std::cout << "Vector Name: "
+                  << timeQueryName<CompareItemName, std::vector<Item>>(n) << "\n";
+        std::cout << "\nList Weight: "
+                    << timeQueryWeight<CompareItemName, std::list<Item>>(n) << "\n";
+        std::cout << "List Name: "
+                  << timeQueryName<CompareItemName, std::list<Item>>(n) << "\n";
+        std::cout << "\nHash Weight: "
+                    << timeQueryWeight<CompareItemName, std::unordered_set<Item>>(n) << "\n";
+        std::cout << "Hash Name: "
+                  << timeQueryName<CompareItemName, std::unordered_set<Item>>(n) << "\n";
+        std::cout << "\nTree Weight: "
+                    << timeQueryWeight<CompareItemName, Tree>(n) << "\n";
+        std::cout << "Tree Name: "
+                  << timeQueryName<CompareItemName, Tree>(n) << "\n";
+    }
+
+
     return 0;
 }
 
+
+/*
 int main()
 {
-    Inventory<CompareItemName> vectInv;
-    Inventory<CompareItemName, std::unordered_set<Item>> unorInv;
-    Inventory<CompareItemName, Tree> treeInv;
-    Inventory<CompareItemName, std::list<Item>> compInv;
+    Item test1("Demonic Dagger");
+    Item test2("mythic mirror");
+    Item test3("Flaming sword");
 
-    timeCheck(vectInv);
-    timeCheck(unorInv);
-    timeCheck(treeInv);
-    timeCheck(compInv);
+    Inventory<CompareItemName, Tree> curInvt{};
 
+    curInvt.pickup(test1);
+    curInvt.pickup(test2);
+    curInvt.pickup(test3);
+
+    std::unordered_set<Item> ans = curInvt.query(test1, test1);
+    for (auto it = ans.begin(); it != ans.end(); ++it) {
+        std::cout << it->name_;
+    }
+
+    Inventory<CompareItemName, std::unordered_set<Item>> testHashInv{};
+    testHashInv.pickup(test1);
+    testHashInv.pickup(test2);
+    testHashInv.pickup(test3);
+
+    std::unordered_set<Item> ans2 = testHashInv.query(test1, test1);
+    for (auto it = ans2.begin(); it != ans2.end(); ++it) {
+        std::cout << it->name_;
+    }
 
     return 0;
 }
+    */
+
+    //Timing

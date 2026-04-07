@@ -1,3 +1,4 @@
+//HashInventory.cpp File By Shane Mindreau 3/24/2026
 #include "HashInventory.hpp"
 
  // @brief Default constructor for the Inventory template class.

@@ -1,3 +1,4 @@
+//Compare.cpp File By Shane Mindreau 3/24/2026
 #include "Compare.hpp"
 
 bool CompareItemWeight::lessThan(const Item& a, const Item& b)

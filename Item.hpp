@@ -1,3 +1,4 @@
+//Item.hpp File By Shane Mindreau 3/24/2026
 #pragma once
 
 #include <iostream>

@@ -1,4 +1,4 @@
-// @file ItemAVL.hpp
+// ItemAVL.hpp File By Shane Mindreau 3/24/2026
 // @brief Defines the interface for the AVLtree class & implementation of the Node struct
 
 

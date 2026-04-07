@@ -1,3 +1,4 @@
+//ItemAVL.cpp File By Shane Mindreau 3/24/2026
 #include "ItemAVL.hpp"
 
 template <class Comparator>
@@ -156,27 +157,6 @@ bool ItemAVL<Comparator>::contains(const std::string& target) const
 template <class Comparator>
 bool ItemAVL<Comparator>::contains(const std::string& target, const Node* subroot) const
 {
-    // bool le, ri, ro = false;
-    
-    // if(subroot->left_) {
-    //     le = contains(target, subroot->left_);
-    // }
-    // if(subroot->right_) {
-    //     ri = contains(target, subroot->right_);
-    // }
-
-    // if(subroot) {
-    //     if(target == subroot->value_.name_) {
-    //         ro = true;
-    //     }
-    // }
-
-    // if(le == true || ri == true || ro == true ) {
-    //     return true;
-    // } else {
-    //     return false;
-    // }
-
     if(!subroot){
         return false;
     }
